@@ -1,0 +1,258 @@
+{
+    "name": "【學生範本】BBC Business Daily Digest",
+    "nodes": [
+        {
+            "parameters": {
+                "operation": "extractHtmlContent",
+                "extractionValues": {
+                    "values": [
+                        {
+                            "key": "Headline #1",
+                            "cssSelector": "h2[data-testid=\"card-headline\"]",
+                            "returnArray": true
+                        },
+                        {
+                            "key": "Top Stories",
+                            "cssSelector": "p[data-testid=\"card-description\"]",
+                            "returnArray": true
+                        },
+                        {
+                            "key": "Section Labels",
+                            "cssSelector": "h2[data-testid=\"nevada-title\"]",
+                            "returnArray": true
+                        },
+                        {
+                            "key": "Market News",
+                            "cssSelector": "[data-testid=\"card-metadata-tag\"]",
+                            "returnArray": true
+                        },
+                        {
+                            "key": "Timestamps",
+                            "cssSelector": "[data-testid=\"card-metadata-lastupdated\"]",
+                            "returnArray": true
+                        }
+                    ]
+                },
+                "options": {
+                    "cleanUpText": true
+                }
+            },
+            "id": "8f12ec51-44e5-4986-a872-4393b37d4b18",
+            "name": "Extract specific content",
+            "type": "n8n-nodes-base.html",
+            "position": [
+                1360,
+                928
+            ],
+            "notesInFlow": true,
+            "typeVersion": 1.2,
+            "notes": "使用 data-testid CSS Selector 擷取 BBC Business 標題、描述、分類標籤與時間戳"
+        },
+        {
+            "parameters": {
+                "url": "https://www.bbc.com/business",
+                "options": {}
+            },
+            "id": "0267f92e-a23e-4f3e-9e70-32b56e504bcb",
+            "name": "Get financial news online",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                1136,
+                928
+            ],
+            "notesInFlow": true,
+            "typeVersion": 4.2,
+            "notes": "從 BBC Business 首頁抓取完整 HTML 內容"
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "triggerAtHour": 7
+                        }
+                    ]
+                }
+            },
+            "id": "aa128328-b017-4e6f-aaaa-dfa5a90cbe1b",
+            "name": "Schedule Trigger",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "position": [
+                912,
+                928
+            ],
+            "typeVersion": 1.2
+        },
+        {
+            "parameters": {
+                "model": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "gpt-4o-mini"
+                },
+                "options": {}
+            },
+            "id": "36d5ef6e-372f-4a19-bc2a-97ffd455ae3d",
+            "name": "OpenAI Chat Model",
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+            "position": [
+                1760,
+                1104
+            ],
+            "typeVersion": 1.2
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "5412a5ee-dbbe-4fcc-98a5-6fafc37b94d1",
+                            "name": "News together",
+                            "type": "string",
+                            "value": "=Source: BBC Business (https://www.bbc.com/business)\nDate: {{ $now.toFormat('yyyy-MM-dd') }}\n\n--- ARTICLE HEADLINES ---\n{{ $('Extract specific content').item.json['Headline #1'] }}\n\n--- ARTICLE DESCRIPTIONS ---\n{{ $('Extract specific content').item.json['Top Stories'] }}\n\n--- SECTION CATEGORIES ---\n{{ $('Extract specific content').item.json['Section Labels'] }}\n\n--- TOPIC TAGS ---\n{{ $('Extract specific content').item.json['Market News'] }}\n\n--- TIMESTAMPS ---\n{{ $('Extract specific content').item.json['Timestamps'] }}\n"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "c22145c5-7094-498b-b766-20197882023c",
+            "name": "Gather the elements",
+            "type": "n8n-nodes-base.set",
+            "position": [
+                1568,
+                928
+            ],
+            "typeVersion": 3.4
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Please summarise the following BBC Business news into a professional daily market digest for investors:\n\n{{ $json['News together'] }}",
+                "options": {
+                    "systemMessage": "You are a professional financial analyst writing a daily market digest email.\n\nYour task:\n1. Read the BBC Business headlines, descriptions, and topic tags provided.\n2. Group related stories under clear thematic sections (e.g. Markets & Economy, Technology & AI, Trade & Geopolitics, Companies, Personal Finance).\n3. For each story, write a 1-2 sentence insight explaining what it means for investors.\n4. End with a brief 2-3 sentence 'Market Outlook' paragraph summarising the overall tone of the day.\n\nFormatting rules:\n- Write valid HTML suitable for an email body (use <h2>, <h3>, <p>, <ul>, <li>, <strong>, <hr> tags).\n- Use a clean, professional style — no excessive emojis.\n- Start directly with the content; do NOT include <html>, <head>, or <body> tags.\n- The first element should be a <h2> with today's date and 'BBC Business Daily Digest'."
+                }
+            },
+            "id": "caac0e9a-40d2-4d5c-8d15-f14d26f14165",
+            "name": "AI Agent",
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "position": [
+                1760,
+                928
+            ],
+            "typeVersion": 1.6
+        },
+        {
+            "parameters": {
+                "content": "# 📋 BBC Business 每日市場摘要 — 學生設定指南\n\n> ⚠️ **匯入後請完成以下 4 個設定步驟，工作流程才能正常執行。**\n\n---\n\n## 🔧 步驟一：設定 OpenAI 憑證（OpenAI Chat Model 節點）\n\n1. 點擊 **「OpenAI Chat Model」** 節點\n2. 在 **Credential** 欄位點擊 **「Create new credential」**\n3. 填入你的 **OpenAI API Key**\n   - 前往 https://platform.openai.com/api-keys 申請\n   - 格式為 `sk-...` 開頭的字串\n4. 點擊 **「Save」** 儲存\n\n> 💡 模型已預設為 `gpt-4o-mini`，費用較低適合練習使用。\n\n---\n\n## 🔧 步驟二：設定 Microsoft Outlook 憑證（Send the summary by e-mail 節點）\n\n1. 點擊 **「Send the summary by e-mail」** 節點\n2. 在 **Credential** 欄位點擊 **「Create new credential」**\n3. 選擇 **「Microsoft Outlook OAuth2 API」**\n4. 點擊 **「Connect my account」**，使用你的 Microsoft 帳號登入授權\n5. 授權完成後點擊 **「Save」**\n\n> ⚠️ 需要有 Microsoft 365 或 Outlook.com 帳號才能使用此節點。\n\n---\n\n## 🔧 步驟三：填寫收件人 Email（Send the summary by e-mail 節點）\n\n1. 點擊 **「Send the summary by e-mail」** 節點\n2. 找到 **「To Recipients」** 欄位\n3. 將預設值改成 **你自己的 Email 地址**\n   - 例如：`yourname@outlook.com`\n4. 點擊右上角 **「Save Workflow」** 儲存整個工作流程\n\n---\n\n## 🔧 步驟四：設定排程時間（選用）\n\n預設為每天 **早上 7:00** 自動執行。\n\n如需修改：\n1. 點擊 **「Schedule Trigger」** 節點\n2. 在 **「Trigger at Hour」** 調整你想要的小時數（0-23）\n3. 儲存工作流程\n\n---\n\n## ✅ 完成後測試\n\n全部設定完成後，點擊畫面右上角的 **「Test workflow」** 手動執行一次，確認：\n- [ ] Extract specific content 節點有擷取到 BBC 新聞標題\n- [ ] AI Agent 有產生 HTML 格式的摘要\n- [ ] 你的 Email 信箱收到每日摘要信件\n\n---\n\n## 📖 工作流程說明\n\n| 節點 | 功能 |\n|------|------|\n| Schedule Trigger | 每天早上 7:00 自動觸發 |\n| Get financial news online | 抓取 BBC Business 首頁 HTML |\n| Extract specific content | 用 CSS Selector 解析新聞標題、描述、標籤 |\n| Gather the elements | 整合所有資料成結構化文字 |\n| OpenAI Chat Model | 提供 GPT 模型（gpt-4o-mini）|\n| AI Agent | 以財務分析師角色撰寫 HTML 格式投資摘要 |\n| Send the summary by e-mail | 透過 Outlook 寄出每日摘要 |\n",
+                "height": 900,
+                "width": 750
+            },
+            "id": "31f20843-9c09-485f-bc3c-65e426b8f394",
+            "name": "Sticky Note",
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                352,
+                680
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "toRecipients": "YOUR_EMAIL@outlook.com",
+                "subject": "={{ 'BBC Business Daily Digest — ' + $now.toFormat('MMM dd, yyyy') }}",
+                "bodyContent": "={{ $json.output }}",
+                "additionalFields": {
+                    "bodyContentType": "html"
+                }
+            },
+            "id": "c58853bf-b5f0-4c14-b5c7-f3acb56e6cd8",
+            "name": "Send the summary by e-mail",
+            "type": "n8n-nodes-base.microsoftOutlook",
+            "position": [
+                2096,
+                928
+            ],
+            "typeVersion": 2,
+            "webhookId": "66175725-c849-4338-9284-c28bff2da2cc"
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Send the summary by e-mail",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Get financial news online",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gather the elements": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract specific content": {
+            "main": [
+                [
+                    {
+                        "node": "Gather the elements",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenAI Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get financial news online": {
+            "main": [
+                [
+                    {
+                        "node": "Extract specific content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "meta": {
+        "templateCredsSetupCompleted": false
+    },
+    "nodeGroups": [],
+    "tags": []
+}

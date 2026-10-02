@@ -1,0 +1,2 @@
+[    1073ms] [INFO] This page uses Chrome's Built-In AI features (LanguageDetector)! We're always improving our models; please submit your feedback here: https://issues.chromium.org/issues/new?component=1583316 @ chrome-extension://bpoadfkcbjbfhfodiogcnhhhpibjhbnh/content_main.js:5271
+[   20417ms] [LOG] [Node: "Get financial news online"] {headers: Object, method: GET, uri: https://www.bbc.com/business, gzip: true, rejectUnauthorized: true} @ http://localhost:5678/assets/usePushConnection-ClfTFtAi.js:0

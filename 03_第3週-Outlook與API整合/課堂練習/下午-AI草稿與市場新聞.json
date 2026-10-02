@@ -1,1 +1,131 @@
-{"name":"第03週下午｜AI 草稿與市場新聞","nodes":[{"parameters":{},"id":"f1","name":"手動開始","type":"n8n-nodes-base.manualTrigger","typeVersion":1,"position":[0,0]},{"parameters":{"assignments":{"assignments":[{"id":"a","name":"headline","value":"央行公布利率決策","type":"string"},{"id":"b","name":"audience","value":"投資研究團隊","type":"string"}]}},"id":"f2","name":"建立新聞測資","type":"n8n-nodes-base.set","typeVersion":3.4,"position":[240,0]},{"parameters":{"assignments":{"assignments":[{"id":"c","name":"outlook_draft_instruction","value":"=請將「{{ $json.headline }}」整理為給 {{ $json.audience }} 的三點摘要郵件草稿；不得捏造數字，需人工覆核後寄送。","type":"string"}]}},"id":"f3","name":"建立 Outlook 草稿提示","type":"n8n-nodes-base.set","typeVersion":3.4,"position":[500,0]}],"connections":{"手動開始":{"main":[[{"node":"建立新聞測資","type":"main","index":0}]]},"建立新聞測資":{"main":[[{"node":"建立 Outlook 草稿提示","type":"main","index":0}]]}},"active":false,"settings":{}}
+{
+    "name": "第03週下午｜AI 草稿與市場新聞 (BBC連貫版)",
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "f1",
+            "name": "手動開始",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a",
+                            "name": "headline",
+                            "value": "BBC Business: 聯準會宣布維持利率不變，全球股市震盪",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b",
+                            "name": "audience",
+                            "value": "投資研究團隊",
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "id": "f2",
+            "name": "模擬 BBC 新聞測資",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                250,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "model": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "gpt-4o-mini"
+                },
+                "options": {}
+            },
+            "id": "f3",
+            "name": "OpenAI Chat Model",
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+            "typeVersion": 1.2,
+            "position": [
+                480,
+                180
+            ]
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=請將這則新聞：「{{ $json.headline }}」\n\n整理為給「{{ $json.audience }}」的三點摘要郵件草稿；\n要求：\n1. 語氣專業\n2. 使用 HTML 格式 (<h2>, <ul>, <li>)\n3. 不得捏造數字，並提醒需人工覆核後寄送。",
+                "options": {
+                    "systemMessage": "你是一位專業的金融分析師，專門為投資團隊撰寫市場新聞摘要。"
+                }
+            },
+            "id": "f4",
+            "name": "AI Agent：撰寫市場摘要",
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.6,
+            "position": [
+                500,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "content": "# 📝 課堂練習：AI 草稿與市場新聞\n\n這個練習接續了上午抓取 BBC 網頁的概念。在自動化流程中，我們抓到新聞後，通常會需要 AI 幫忙解讀與摘要。\n\n### 💡 學習重點：\n1. **模擬資料 (Set)**：因為我們還沒把上午的流程拼起來，這裡先用 Set 節點「假裝」我們已經抓到了 BBC 的新聞標題，並指定了收件受眾（投資研究團隊）。\n2. **AI Agent**：這是下午的重頭戲！我們將 Set 節點的變數 `{{ $json.headline }}` 餵給 AI，讓它根據 Prompt 指令自動生成專業的 HTML 摘要草稿。\n3. **OpenAI Chat Model**：提供 AI Agent 智慧的大腦（需設定 OpenAI 憑證）。\n\n透過這個練習，你已經學會了如何把「動態變數」交給 AI 處理，這正是最終「每日市場摘要自動化」最核心的技術！",
+                "height": 380,
+                "width": 550
+            },
+            "id": "sticky-2",
+            "name": "Sticky Note",
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                50,
+                240
+            ]
+        }
+    ],
+    "connections": {
+        "手動開始": {
+            "main": [
+                [
+                    {
+                        "node": "模擬 BBC 新聞測資",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "模擬 BBC 新聞測資": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent：撰寫市場摘要",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenAI Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent：撰寫市場摘要",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {}
+}

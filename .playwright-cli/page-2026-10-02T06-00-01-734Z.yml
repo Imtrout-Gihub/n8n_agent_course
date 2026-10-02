@@ -1,0 +1,193 @@
+- generic [ref=f1e3]:
+  - main [ref=f1e4]:
+    - generic [ref=f1e6]:
+      - generic [ref=f1e9]:
+        - generic [ref=f1e1424]:
+          - generic [ref=f1e1427]:
+            - link "Personal" [ref=f1e1429] [cursor=pointer]:
+              - /url: /projects/vet5puY7XPsBQSRu
+              - generic [ref=f1e1431]:
+                - generic "Personal" [ref=f1e1432]
+                - generic "Personal" [ref=f1e1437]
+            - generic [ref=f1e1438]: /
+            - generic "My workflow 3" [ref=f1e1439]
+          - button "More actions" [ref=f1e1444] [cursor=pointer]
+          - generic [ref=f1e1454]:
+            - button "Publish" [ref=f1e1455] [cursor=pointer]
+            - button "More actions" [ref=f1e1461] [cursor=pointer]
+        - radiogroup [ref=f1e12]:
+          - radio "Editor" [checked] [ref=f1e13] [cursor=pointer]
+          - radio "Executions" [ref=f1e14] [cursor=pointer]
+          - radio "Evaluations" [ref=f1e15] [cursor=pointer]
+      - complementary [ref=f1e16]:
+        - generic [ref=f1e17]:
+          - generic [ref=f1e19]:
+            - link [ref=f1e20] [cursor=pointer]:
+              - /url: /home
+            - menubar [ref=f1e27]:
+              - menuitem [ref=f1e28]:
+                - button "Add new item" [ref=f1e30] [cursor=pointer]
+            - button "Open command palette" [ref=f1e35] [cursor=pointer]
+            - button "Toggle sidebar" [ref=f1e42] [cursor=pointer]
+          - generic [ref=f1e52]:
+            - menuitem "AI Assistant" [ref=f1e54] [cursor=pointer]:
+              - generic [ref=f1e60]:
+                - generic [ref=f1e61]: AI Assistant
+                - generic [ref=f1e62]: Preview
+            - menuitem "Overview" [ref=f1e64] [cursor=pointer]
+          - generic [ref=f1e73]:
+            - menuitem "Templates" [ref=f1e75] [cursor=pointer]
+            - menuitem "Insights" [ref=f1e85] [cursor=pointer]
+            - menuitem "Help" [ref=f1e92] [cursor=pointer]
+            - menuitem "Settings" [ref=f1e103] [cursor=pointer]
+      - main [ref=f1e113]:
+        - generic [ref=f1e116]:
+          - generic [ref=f1e118]:
+            - generic [ref=f1e120]:
+              - generic:
+                - img:
+                  - group "Edge from caac0e9a-40d2-4d5c-8d15-f14d26f14165 to c58853bf-b5f0-4c14-b5c7-f3acb56e6cd8"
+                - img:
+                  - group "Edge from aa128328-b017-4e6f-aaaa-dfa5a90cbe1b to 0267f92e-a23e-4f3e-9e70-32b56e504bcb"
+                - img:
+                  - group "Edge from c22145c5-7094-498b-b766-20197882023c to caac0e9a-40d2-4d5c-8d15-f14d26f14165"
+                - img:
+                  - group "Edge from 8f12ec51-44e5-4986-a872-4393b37d4b18 to c22145c5-7094-498b-b766-20197882023c"
+                - img:
+                  - group "Edge from 36d5ef6e-372f-4a19-bc2a-97ffd455ae3d to caac0e9a-40d2-4d5c-8d15-f14d26f14165"
+                - img:
+                  - group "Edge from 0267f92e-a23e-4f3e-9e70-32b56e504bcb to 8f12ec51-44e5-4986-a872-4393b37d4b18"
+                - generic:
+                  - group [ref=f1e121] [cursor=pointer]:
+                    - generic [ref=f1e122]:
+                      - generic [ref=f1e131]:
+                        - button "Execute step" [ref=f1e133]
+                        - button "Deactivate" [ref=f1e138]
+                        - button "Delete" [ref=f1e144]
+                        - button "More actions" [ref=f1e149]
+                      - generic [ref=f1e153]:
+                        - generic:
+                          - generic: Extract specific content
+                          - generic: Extract selected headlines, editor's picks, spotlight etc.
+                  - group [ref=f1e157] [cursor=pointer]:
+                    - generic [ref=f1e158]:
+                      - generic [ref=f1e167]:
+                        - button "Execute step" [ref=f1e169]
+                        - button "Deactivate" [ref=f1e174]
+                        - button "Delete" [ref=f1e180]
+                        - button "More actions" [ref=f1e185]
+                      - generic [ref=f1e189]:
+                        - generic:
+                          - generic: Get financial news online
+                          - generic: "Url : https://www.ft.com/"
+                  - group [ref=f1e193] [cursor=pointer]:
+                    - generic [ref=f1e194]:
+                      - generic [ref=f1e199]:
+                        - button "Execute step" [ref=f1e201]
+                        - button "Deactivate" [ref=f1e206]
+                        - button "Delete" [ref=f1e212]
+                        - button "More actions" [ref=f1e217]
+                      - generic [ref=f1e221]: Schedule Trigger
+                      - generic:
+                        - generic:
+                          - button "Execute workflow"
+                  - group [ref=f1e225] [cursor=pointer]:
+                    - generic [ref=f1e226]:
+                      - generic [ref=f1e227]: Model
+                      - generic [ref=f1e232]:
+                        - button "Deactivate" [ref=f1e234]
+                        - button "Delete" [ref=f1e240]
+                        - button "More actions" [ref=f1e245]
+                      - generic [ref=f1e249]: OpenAI Chat Model
+                  - group [ref=f1e253] [cursor=pointer]:
+                    - generic [ref=f1e254]:
+                      - generic [ref=f1e263]:
+                        - button "Execute step" [ref=f1e265]
+                        - button "Deactivate" [ref=f1e270]
+                        - button "Delete" [ref=f1e276]
+                        - button "More actions" [ref=f1e281]
+                      - generic [ref=f1e285]:
+                        - generic:
+                          - generic: Gather the elements
+                          - generic: manual
+                  - group [ref=f1e289] [cursor=pointer]:
+                    - generic [ref=f1e290]:
+                      - generic [ref=f1e299]: Chat Model*
+                      - generic [ref=f1e304]: Memory
+                      - generic [ref=f1e314]: Tool
+                      - generic [ref=f1e324]:
+                        - button "Execute step" [ref=f1e326]
+                        - button "Deactivate" [ref=f1e331]
+                        - button "Delete" [ref=f1e337]
+                        - button "More actions" [ref=f1e342]
+                      - generic [ref=f1e346]: AI Agent
+                  - group [ref=f1e350] [cursor=pointer]:
+                    - generic [ref=f1e351]:
+                      - generic [ref=f1e352]:
+                        - button "Delete" [ref=f1e354]
+                        - generic [ref=f1e358]:
+                          - generic "Change color" [ref=f1e359]
+                          - textbox: "#000000"
+                        - button "More actions" [ref=f1e368]
+                      - generic [ref=f1e383]:
+                        - heading "Financial News Recap Workflow" [level=1] [ref=f1e384]
+                        - paragraph [ref=f1e385]: This workflow automates the daily email delivery of curated financial news to a designated recipient at 7:00 AM. It extracts relevant financial news articles, structures the content, and sends it in a concise summary format via Microsoft Outlook.
+                        - heading "Workflow Steps" [level=3] [ref=f1e386]
+                        - list [ref=f1e387]:
+                          - listitem [ref=f1e388]:
+                            - strong [ref=f1e389]: Schedule Trigger
+                            - text: Sets the workflow to activate daily at 7:00 AM.
+                          - listitem [ref=f1e390]:
+                            - strong [ref=f1e391]: Fetch Financial News
+                            - text: Retrieves financial news content from
+                            - link "ft.com" [ref=f1e392]:
+                              - /url: https://www.ft.com/
+                            - text: using an HTTP Request node.
+                          - listitem [ref=f1e393]:
+                            - strong [ref=f1e394]: Extract News Headlines and Sections
+                            - text: "Using CSS selectors, this node parses specific sections of the HTML page to gather key headlines and sections:"
+                        - list [ref=f1e395]:
+                          - listitem [ref=f1e396]: "Headline #1, Headline #2"
+                          - listitem [ref=f1e397]: Editor’s Picks
+                          - listitem [ref=f1e398]: etc.
+                        - list [ref=f1e399]:
+                          - listitem [ref=f1e400]:
+                            - strong [ref=f1e401]: Aggregate News Content
+                            - text: Combines all extracted news sections into a single data set, organizing content under relevant categories.
+                          - listitem [ref=f1e402]:
+                            - strong [ref=f1e403]: AI Agent for Summarization
+                            - text: An OpenAI Chat Model (gpt-4o-mini) generates a structured summary in HTML format, optimized to provide investors with a clear market overview.
+                          - listitem [ref=f1e404]:
+                            - strong [ref=f1e405]: Email Dispatch
+                            - text: Sends the summarized content via Microsoft Outlook with a subject “Financial news from today,” formatted in HTML for clarity and readability.
+                  - group [ref=f1e406] [cursor=pointer]:
+                    - generic [ref=f1e407]:
+                      - generic [ref=f1e421]:
+                        - button "Execute step" [ref=f1e423]
+                        - button "Deactivate" [ref=f1e428]
+                        - button "Delete" [ref=f1e434]
+                        - button "More actions" [ref=f1e439]
+                      - generic [ref=f1e443]:
+                        - generic:
+                          - generic: Send the summary by e-mail
+                          - generic: "send: message"
+            - group [ref=f1e455]:
+              - button "Zoom to Fit" [ref=f1e457] [cursor=pointer]
+              - button "Zoom In" [ref=f1e462] [cursor=pointer]
+              - button "Zoom Out" [ref=f1e469] [cursor=pointer]
+              - button "Tidy Up" [ref=f1e476] [cursor=pointer]
+          - button "Execute workflow" [ref=f1e483] [cursor=pointer]
+          - group [ref=f1e1465]:
+            - button "Open nodes panel" [ref=f1e1467] [cursor=pointer]
+            - button "Command bar" [ref=f1e1472] [cursor=pointer]
+            - button "Add sticky note" [ref=f1e1479] [cursor=pointer]
+            - button "Open focus panel" [ref=f1e1486] [cursor=pointer]
+            - button "n8n AI" [ref=f1e1491] [cursor=pointer]
+          - generic:
+            - complementary
+        - generic [ref=f1e528] [cursor=pointer]:
+          - generic [ref=f1e529]: Logs
+          - generic [ref=f1e531]:
+            - button "Pop out panel" [ref=f1e533]
+            - button "Open panel" [ref=f1e538]
+  - complementary

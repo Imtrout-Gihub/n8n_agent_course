@@ -1,1 +1,138 @@
-{"name":"第03週上午｜Outlook、HTTP 與控制節點","nodes":[{"parameters":{},"id":"e1","name":"手動開始","type":"n8n-nodes-base.manualTrigger","typeVersion":1,"position":[0,0]},{"parameters":{"url":"https://jsonplaceholder.typicode.com/posts/1","options":{}},"id":"e2","name":"HTTP Request：讀取測試資料","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[250,0]},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict"},"conditions":[{"id":"a","leftValue":"={{ $json.id }}","rightValue":1,"operator":{"type":"number","operation":"equals"}}],"combinator":"and"}},"id":"e3","name":"If：資料是否有效","type":"n8n-nodes-base.if","typeVersion":2.2,"position":[520,0]}],"connections":{"手動開始":{"main":[[{"node":"HTTP Request：讀取測試資料","type":"main","index":0}]]},"HTTP Request：讀取測試資料":{"main":[[{"node":"If：資料是否有效","type":"main","index":0}]]}},"active":false,"settings":{}}
+{
+    "name": "第03週上午｜Outlook、HTTP 與控制節點 (BBC範例)",
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "e1",
+            "name": "手動開始",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://www.bbc.com/business",
+                "options": {}
+            },
+            "id": "e2",
+            "name": "HTTP Request：抓取 BBC 商業新聞",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "extractHtmlContent",
+                "extractionValues": {
+                    "values": [
+                        {
+                            "key": "title",
+                            "cssSelector": "title",
+                            "returnArray": false
+                        }
+                    ]
+                },
+                "options": {
+                    "cleanUpText": true
+                }
+            },
+            "id": "e3",
+            "name": "HTML Extract：取得網頁標題",
+            "type": "n8n-nodes-base.html",
+            "typeVersion": 1.2,
+            "position": [
+                480,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": false,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "a",
+                            "leftValue": "={{ $json.title }}",
+                            "rightValue": "BBC",
+                            "operator": {
+                                "type": "string",
+                                "operation": "contains"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                }
+            },
+            "id": "e4",
+            "name": "If：標題是否包含 BBC",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                720,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "content": "# 📝 課堂練習：HTTP 抓取與資料驗證\n\n這個練習展示了如何抓取真實網頁（BBC Business）並驗證內容。\n\n### 💡 學習重點：\n1. **HTTP Request**：對 `https://www.bbc.com/business` 發送請求，取得網頁原始碼。\n2. **HTML Extract**：加入一個 HTML 節點，用來從複雜的網頁 HTML 中萃取出我們要的資訊（例如 `<title>` 標籤）。\n3. **If (控制節點)**：判斷萃取出的網頁標題字串中是否包含 `BBC`。如果有，資料會走 `true` 分支，否則走 `false` 分支。\n\n這為我們下午的「每日市場新聞摘要」自動化流程先做了一個小暖身！",
+                "height": 340,
+                "width": 550
+            },
+            "id": "sticky-1",
+            "name": "Sticky Note",
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                50,
+                200
+            ]
+        }
+    ],
+    "connections": {
+        "手動開始": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request：抓取 BBC 商業新聞",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request：抓取 BBC 商業新聞": {
+            "main": [
+                [
+                    {
+                        "node": "HTML Extract：取得網頁標題",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTML Extract：取得網頁標題": {
+            "main": [
+                [
+                    {
+                        "node": "If：標題是否包含 BBC",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {}
+}
