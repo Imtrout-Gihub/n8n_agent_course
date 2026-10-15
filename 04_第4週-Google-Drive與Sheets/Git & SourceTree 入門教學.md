@@ -1,6 +1,5 @@
 # 零基礎 Git & SourceTree 入門教學：輕鬆下載教材與交作業指南
 
-這份教學專門為**完全沒有 Git 終端機指令基礎**的初學者設計！  
 本篇教學會帶你使用視覺化視窗工具 **SourceTree**，搭配 GitHub 的 **Fork** 功能，完成：
 1. 把老師的課程專案（`roapple10/n8n_agent_course`）複製成你自己的專屬版本。
 2. 用滑鼠點擊完成下載（Clone）、檔案修改、儲存進度（Commit）並上傳（Push）到自己的 GitHub。
