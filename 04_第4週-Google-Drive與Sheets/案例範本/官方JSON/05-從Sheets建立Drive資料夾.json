@@ -359,9 +359,9 @@
       ],
       "parameters": {
         "color": 6,
-        "width": 752,
-        "height": 624,
-        "content": "## Client Onboarding Automation\n\n**Who it is for:** Photographers, agencies, consultants, or any service-based business that needs to onboard new clients with organized file sharing.\n\n**What it does:**\n- Watches a Google Sheet for new client rows\n- Checks if a Google Drive folder already exists for that client\n- Automatically creates a client folder and subfolders (Documents, Media) if missing\n- Shares the folder with the client's email address(es)\n- Writes the Drive folder URL back to the sheet for easy access\n\n**How it works:** When a new row is added to your Google Sheet, the workflow reads the client code, name, and email. It then searches for an existing folder in Google Drive. If none exists, it creates the folder structure and shares it.\n\n**Requirements:**\n- Google Sheets and Google Drive OAuth2 credentials\n- A Google Sheet with columns: Code, Name, Email, Drive, Url\n- A parent Google Drive folder to store all client folders\n\n**How to set up:**\n1. Open the Configuration node and enter your Parent Folder URL.\n2. Connect your Google OAuth2 credentials for both Sheets and Drive.\n3. Activate the workflow and add a new client row to your sheet to test.\n\n**How to customize:**\nYou can change the subfolder names, permission roles, or add more columns to track additional data."
+        "width": 920,
+        "height": 1320,
+        "content": "## n8n 設定步驟\n\n1. 在 Google Drive 建立一個父資料夾，例如「客戶資料夾」。\n2. 複製父資料夾的完整網址。\n3. 打開 n8n 工作流程。\n4. 在 `Configuration` 節點的 `ParentDriveFolderUrl` 貼上父資料夾網址。\n5. 打開 `When sheet row is added` 節點：\n   - Credential：選擇有權存取上述試算表的 Google 帳號。\n   - Document：選擇 `n8n 客戶資料夾建立清單`。\n   - Sheet：選擇 `Clients`。\n6. 所有 Google Drive 節點也要選擇有權存取父資料夾的 Credential。\n7. 打開 `Search for client folder` 節點，在 Settings 啟用 `Always Output Data`。這一點很重要，否則第一次找不到客戶資料夾時，後續建立節點可能不會執行。\n8. 儲存並啟用工作流程。\n9. 啟用後才在 `Clients` 新增資料，例如：\n\n| Code | Name | Email | Url |\n| --- | --- | --- | --- |\n| CL-001 | 王小明 | 真實帳號@gmail.com | 留空 |\n\n多人共享時，Email 使用逗號分隔：\n\n```text\na@gmail.com, b@gmail.com\n```\n\n### 成功執行後，n8n 會\n\n- 建立 `CL-001 - 王小明` 資料夾\n- 建立 `Documents` 與 `Media` 子資料夾\n- 將資料夾分享給 Email 欄內的帳號\n- 把資料夾網址寫回 `Url`\n\n> 如果試算表沒有出現在 n8n 選單，代表 n8n 使用的是另一個 Google 帳號。請把 Sheet 分享給「實際登入 n8n Credential 的 Google 帳號或服務帳號 Email」，不要分享給 OAuth 用戶端 ID。"
       },
       "typeVersion": 1
     },

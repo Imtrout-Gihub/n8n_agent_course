@@ -20,12 +20,22 @@
         16
       ],
       "parameters": {
-        "operation": "getAll",
+        "resource": "sheet",
+        "operation": "read",
         "documentId": {
           "__rl": true,
           "mode": "id",
           "value": "YOUR_SOURCE_GOOGLE_SHEET_ID"
-        }
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Sheet1"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
       },
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -36,14 +46,36 @@
       "typeVersion": 4.6
     },
     {
-      "id": "65ac2d1d-d51a-4193-b31b-fd62008af926",
-      "name": "Upload Backup to Google Drive",
-      "type": "n8n-nodes-base.googleDrive",
+      "id": "531bed7e-8c6b-44fd-9f87-2785685dfbdb",
+      "name": "Convert Sheet Data to CSV",
+      "type": "n8n-nodes-base.convertToFile",
       "position": [
         576,
         16
       ],
       "parameters": {
+        "operation": "csv",
+        "binaryPropertyName": "data",
+        "options": {
+          "fileName": "=backup_Sheet1_{{ $now.toFormat('yyyy-MM-dd_HH-mm-ss') }}.csv",
+          "headerRow": true
+        }
+      },
+      "typeVersion": 1.1
+    },
+    {
+      "id": "65ac2d1d-d51a-4193-b31b-fd62008af926",
+      "name": "Upload Backup to Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        800,
+        16
+      ],
+      "parameters": {
+        "resource": "file",
+        "operation": "upload",
+        "inputDataFieldName": "data",
+        "name": "={{ $binary.data.fileName }}",
         "driveId": {
           "__rl": true,
           "mode": "list",
@@ -88,7 +120,7 @@
       ],
       "parameters": {
         "height": 688,
-        "content": "## Configure the Nodes\n\n\nRead Google Sheet Data Node:\n\nSelect your Google Sheets credential.\n\nReplace YOUR_SOURCE_GOOGLE_SHEET_ID with the ID of the Google Sheet you want to back up.\n\nReplace Sheet1 with the exact name of the tab you want to back up.\n\nUpload Backup to Google Drive Node:\n\nSelect your Google Drive credential.\n\nReplace YOUR_DESTINATION_GOOGLE_DRIVE_FOLDER_ID with the ID of the Google Drive folder where you want to store backups.\n\nFile Type: The fileType is set to csv. You can change this to xlsx if you prefer an Excel format for the backup (though CSV is often simpler for raw data backups).\n\nStep 5: Activate and Test the Workflow\n\nClick the \"Activate\" toggle button.\n\nTo test immediately, click \"Execute Workflow\".\n\nCheck your Google Drive backup folder. A new file named something like backup_Sheet1_2025-07-26.csv should appear.\n\n"
+        "content": "## Configure the Nodes\n\n\nRead Google Sheet Data Node:\n\nSelect your Google Sheets credential.\n\nReplace YOUR_SOURCE_GOOGLE_SHEET_ID with the ID of the Google Sheet you want to back up.\n\nReplace Sheet1 with the exact name of the tab you want to back up.\n\nConvert Sheet Data to CSV Node:\n\nThis node converts the Google Sheets rows into a CSV binary file in the data field. The file name includes the execution timestamp.\n\nUpload Backup to Google Drive Node:\n\nSelect your Google Drive credential.\n\nReplace YOUR_DESTINATION_GOOGLE_DRIVE_FOLDER_ID with the ID of the Google Drive folder where you want to store backups.\n\nThe upload node reads the binary file from the data field.\n\nStep 5: Activate and Test the Workflow\n\nClick the \"Activate\" toggle button.\n\nTo test immediately, click \"Execute Workflow\".\n\nCheck your Google Drive backup folder. A new file named something like backup_Sheet1_2025-07-26_02-00-00.csv should appear.\n\n"
       },
       "typeVersion": 1
     },
@@ -110,6 +142,17 @@
   "pinData": {},
   "connections": {
     "Read Google Sheet Data": {
+      "main": [
+        [
+          {
+            "node": "Convert Sheet Data to CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Sheet Data to CSV": {
       "main": [
         [
           {
