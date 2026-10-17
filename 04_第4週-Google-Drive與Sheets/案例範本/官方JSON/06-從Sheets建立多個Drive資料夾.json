@@ -1,0 +1,598 @@
+{
+    "id": "xLXlZeBczAseQqwU",
+    "name": "Create and share client folders from Google Sheets to Google Drive",
+    "tags": [],
+    "nodes": [
+        {
+            "id": "d821daea-2e60-46b1-b49e-cefeca964530",
+            "name": "When sheet row is added",
+            "type": "n8n-nodes-base.googleSheetsTrigger",
+            "position": [
+                -288,
+                160
+            ],
+            "parameters": {
+                "options": {},
+                "pollTimes": {
+                    "item": [
+                        {
+                            "mode": "everyHour"
+                        }
+                    ]
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "",
+                    "cachedResultUrl": "",
+                    "cachedResultName": ""
+                },
+                "documentId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": ""
+                }
+            },
+            "credentials": {
+                "googleSheetsTriggerOAuth2Api": {
+                    "id": "credential-id",
+                    "name": "googleSheetsTriggerOAuth2Api Credential"
+                }
+            },
+            "typeVersion": 1,
+            "alwaysOutputData": false
+        },
+        {
+            "id": "7a432ead-8f47-4d97-a2df-9e913b1f6ca2",
+            "name": "Configuration",
+            "type": "n8n-nodes-base.set",
+            "position": [
+                -96,
+                160
+            ],
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {},
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "baa458e5-2d85-4cf0-b3f9-8aa4aa2d4036",
+                            "name": "ParentDriveFolderUrl",
+                            "type": "string",
+                            "value": ""
+                        }
+                    ]
+                }
+            },
+            "typeVersion": 3.4
+        },
+        {
+            "id": "e2f5b8a1-4321-4f9a-b8c2-7d1a2e3f4a5b",
+            "name": "Loop over rows",
+            "type": "n8n-nodes-base.splitInBatches",
+            "position": [
+                96,
+                160
+            ],
+            "parameters": {
+                "batchSize": 1,
+                "options": {}
+            },
+            "typeVersion": 3
+        },
+        {
+            "id": "6f5ba8bc-152f-4377-a407-2be2bd8bd17f",
+            "name": "Share folder with client",
+            "type": "n8n-nodes-base.googleDrive",
+            "position": [
+                2176,
+                368
+            ],
+            "parameters": {
+                "options": {},
+                "resource": "folder",
+                "operation": "share",
+                "permissionsUi": {
+                    "permissionsValues": {
+                        "role": "reader",
+                        "type": "user",
+                        "emailAddress": "={{ $json.value }}"
+                    }
+                },
+                "folderNoRootId": {
+                    "__rl": true,
+                    "mode": "id",
+                    "value": "={{ $('Search for client folder').item.json.id || $('Create Client folder').item.json.id }}"
+                }
+            },
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "credential-id",
+                    "name": "googleDriveOAuth2Api Credential"
+                }
+            },
+            "disabled": true,
+            "typeVersion": 3
+        },
+        {
+            "id": "41bc1c3d-01f1-4e48-9058-3a5c15e6aeb5",
+            "name": "Update sheet with folder URL",
+            "type": "n8n-nodes-base.googleSheets",
+            "position": [
+                2384,
+                96
+            ],
+            "parameters": {
+                "columns": {
+                    "value": {
+                        "Url": "=https://drive.google.com/drive/u/0/folders/{{ $('Search for client folder').item.json.id || $('Create Client folder').item.json.id }}",
+                        "Code": "={{ $('Loop over rows').item.json.Code }}"
+                    },
+                    "schema": [
+                        {
+                            "id": "Code",
+                            "type": "string",
+                            "display": true,
+                            "removed": false,
+                            "required": false,
+                            "displayName": "Code",
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Name",
+                            "type": "string",
+                            "display": true,
+                            "removed": true,
+                            "required": false,
+                            "displayName": "Name",
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Email",
+                            "type": "string",
+                            "display": true,
+                            "removed": true,
+                            "required": false,
+                            "displayName": "Email",
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Url",
+                            "type": "string",
+                            "display": true,
+                            "removed": false,
+                            "required": false,
+                            "displayName": "Url",
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "row_number",
+                            "type": "number",
+                            "display": true,
+                            "removed": true,
+                            "readOnly": true,
+                            "required": false,
+                            "displayName": "row_number",
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "mappingMode": "defineBelow",
+                    "matchingColumns": [
+                        "Code"
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {},
+                "operation": "update",
+                "sheetName": {
+                    "__rl": true,
+                    "mode": "id",
+                    "value": "={{ $('When sheet row is added').params.sheetName.value }}"
+                },
+                "documentId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "={{ $('When sheet row is added').params.documentId.value }}"
+                }
+            },
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "credential-id",
+                    "name": "googleSheetsOAuth2Api Credential"
+                }
+            },
+            "typeVersion": 4.7
+        },
+        {
+            "id": "99660e77-b2d0-4086-8ce7-bbbd1363791f",
+            "name": "Search for client folder",
+            "type": "n8n-nodes-base.googleDrive",
+            "onError": "continueRegularOutput",
+            "position": [
+                288,
+                160
+            ],
+            "parameters": {
+                "filter": {
+                    "driveId": {
+                        "__rl": true,
+                        "mode": "list",
+                        "value": "My Drive",
+                        "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+                        "cachedResultName": "My Drive"
+                    },
+                    "whatToSearch": "folders"
+                },
+                "options": {},
+                "resource": "fileFolder",
+                "queryString": "={{ $('Loop over rows').item.json.Code }}"
+            },
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "credential-id",
+                    "name": "googleDriveOAuth2Api Credential"
+                }
+            },
+            "typeVersion": 3,
+            "alwaysOutputData": true
+        },
+        {
+            "id": "8104ede4-1038-46db-94c9-faa3e33110f0",
+            "name": "Check if folder exists",
+            "type": "n8n-nodes-base.if",
+            "position": [
+                496,
+                160
+            ],
+            "parameters": {
+                "options": {},
+                "conditions": {
+                    "options": {
+                        "version": 3,
+                        "leftValue": "",
+                        "caseSensitive": true,
+                        "typeValidation": "strict"
+                    },
+                    "combinator": "and",
+                    "conditions": [
+                        {
+                            "id": "82382bdd-ef8b-4ed7-ba2a-72fbb3e718d6",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            },
+                            "leftValue": "={{ $json.id }}",
+                            "rightValue": ""
+                        }
+                    ]
+                }
+            },
+            "typeVersion": 2.3
+        },
+        {
+            "id": "aeef3ff1-aea7-4086-bb19-e2450c7dc884",
+            "name": "Parse client emails",
+            "type": "n8n-nodes-base.code",
+            "position": [
+                1840,
+                112
+            ],
+            "parameters": {
+                "jsCode": "const items = [];\nconst emailField = $('Loop over rows').item.json.Email || '';\nconst users = emailField.split(',');\nconst lists = users.map(value => value.trim()).filter(value => value.length > 0);\n\nfor (const text of lists) {\n  items.push({ json: { value: text } });\n}\n\nif (items.length === 0) {\n  return [{ json: { value: '' } }];\n}\n\nreturn items;\n"
+            },
+            "typeVersion": 2
+        },
+        {
+            "id": "ac4c9514-5986-45f0-a89e-490cec9dbe28",
+            "name": "Loop over emails",
+            "type": "n8n-nodes-base.splitInBatches",
+            "position": [
+                2112,
+                112
+            ],
+            "parameters": {
+                "options": {}
+            },
+            "typeVersion": 3
+        },
+        {
+            "id": "c0887ba9-4aa3-4157-9e8b-d303cce4c7a9",
+            "name": "Create Documents subfolder",
+            "type": "n8n-nodes-base.googleDrive",
+            "position": [
+                1136,
+                624
+            ],
+            "parameters": {
+                "name": "=Documents",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "options": {},
+                "folderId": {
+                    "__rl": true,
+                    "mode": "id",
+                    "value": "={{ $json.id }}"
+                },
+                "resource": "folder"
+            },
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "credential-id",
+                    "name": "googleDriveOAuth2Api Credential"
+                }
+            },
+            "typeVersion": 3
+        },
+        {
+            "id": "1b915af6-5010-49d7-94c1-f5afac3168cb",
+            "name": "Create Media subfolder",
+            "type": "n8n-nodes-base.googleDrive",
+            "position": [
+                1328,
+                624
+            ],
+            "parameters": {
+                "name": "=Media",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "options": {},
+                "folderId": {
+                    "__rl": true,
+                    "mode": "id",
+                    "value": "={{ $('Create Client folder').item.json.id }}"
+                },
+                "resource": "folder"
+            },
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "credential-id",
+                    "name": "googleDriveOAuth2Api Credential"
+                }
+            },
+            "typeVersion": 3
+        },
+        {
+            "id": "31126ca5-396d-4753-9a96-4e7eaa79979b",
+            "name": "Overview sticky",
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -320,
+                -576
+            ],
+            "parameters": {
+                "color": 6,
+                "width": 1120,
+                "height": 1320,
+                "content": "## n8n 設定步驟（支援 Row-by-Row 批次處理）\n\n1. 在 Google Drive 建立一個父資料夾，例如「客戶資料夾」。\n2. 複製父資料夾的完整網址。\n3. 打開 n8n 工作流程。\n4. 在 `Configuration` 節點的 `ParentDriveFolderUrl` 貼上父資料夾網址。\n5. 打開 `When sheet row is added` 節點：\n   - Credential：選擇有權存取上述試算表的 Google 帳號。\n   - Document：選擇 `n8n 客戶資料夾建立清單`。\n   - Sheet：選擇 `Clients`。\n6. 所有 Google Drive 節點也要選擇有權存取父資料夾的 Credential。\n7. `Loop over rows` 節點已設定為逐列（Batch Size = 1）處理，可安全避免多列資料時的 Multiple matching items 配對錯誤。\n8. 儲存並啟用工作流程。\n9. 啟用後才在 `Clients` 新增資料，例如：\n\n| Code | Name | Email | Url |\n| --- | --- | --- | --- |\n| CL-001 | 王小明 | 真實帳號@gmail.com | 留空 |\n\n多人共享時，Email 使用逗號分隔：\n\n```text\na@gmail.com, b@gmail.com\n```\n\n### 成功執行後，n8n 會依序針對每一列\n\n- 透過 `Loop over rows` 依序逐列處理\n- 檢查是否已存在該 Code 的資料夾\n- 不存在則建立 `{Code} - {Name}` 資料夾\n- 建立 `Documents` 與 `Media` 子資料夾\n- 將資料夾分享給 Email 欄內的帳號（若啟用分享節點）\n- 把資料夾網址寫回該列的 `Url`\n- 迴圈接續處理下一列直到全部完成"
+            },
+            "typeVersion": 1
+        },
+        {
+            "id": "99c1480c-9ba4-4729-a526-f4d9215de23e",
+            "name": "Step 1 sticky",
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                816,
+                464
+            ],
+            "parameters": {
+                "width": 704,
+                "height": 384,
+                "content": "### Step 1: Folder Check & Creation (Row by Row)\n\n1. Search for existing client folder by Code\n2. If found, skip to email parsing\n3. If not found, create client folder inside parent folder\n4. Create Documents and Media subfolders inside client folder"
+            },
+            "typeVersion": 1
+        },
+        {
+            "id": "04f6a6e1-368c-48d8-a58f-dbd9a0568b7c",
+            "name": "Step 2 sticky",
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                1728,
+                0
+            ],
+            "parameters": {
+                "width": 944,
+                "height": 624,
+                "content": "### Step 2: Sharing & Update\n\n1. Parse comma-separated emails from the sheet for current row\n2. Loop over each email and share the folder\n3. Update the sheet row with Drive folder ID and URL\n4. Loop back to process next row"
+            },
+            "typeVersion": 1
+        },
+        {
+            "id": "96f7db4b-fd27-4556-bec9-bdef9472cc26",
+            "name": "Create Client folder",
+            "type": "n8n-nodes-base.googleDrive",
+            "position": [
+                944,
+                624
+            ],
+            "parameters": {
+                "name": "={{ $('Loop over rows').item.json.Code }} - {{ $('Loop over rows').item.json.Name }}",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "options": {},
+                "folderId": {
+                    "__rl": true,
+                    "mode": "url",
+                    "value": "={{ $('Configuration').first().json.ParentDriveFolderUrl }}"
+                },
+                "resource": "folder"
+            },
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "credential-id",
+                    "name": "googleDriveOAuth2Api Credential"
+                }
+            },
+            "typeVersion": 3
+        }
+    ],
+    "active": false,
+    "pinData": {},
+    "settings": {},
+    "versionId": "2eb61fa9-dc6e-4433-ab00-9f8655752a43",
+    "connections": {
+        "When sheet row is added": {
+            "main": [
+                [
+                    {
+                        "node": "Configuration",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Configuration": {
+            "main": [
+                [
+                    {
+                        "node": "Loop over rows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop over rows": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Search for client folder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Search for client folder": {
+            "main": [
+                [
+                    {
+                        "node": "Check if folder exists",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check if folder exists": {
+            "main": [
+                [
+                    {
+                        "node": "Parse client emails",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Create Client folder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Client folder": {
+            "main": [
+                [
+                    {
+                        "node": "Create Documents subfolder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Documents subfolder": {
+            "main": [
+                [
+                    {
+                        "node": "Create Media subfolder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Media subfolder": {
+            "main": [
+                [
+                    {
+                        "node": "Parse client emails",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse client emails": {
+            "main": [
+                [
+                    {
+                        "node": "Loop over emails",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop over emails": {
+            "main": [
+                [
+                    {
+                        "node": "Update sheet with folder URL",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Share folder with client",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Share folder with client": {
+            "main": [
+                [
+                    {
+                        "node": "Loop over emails",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update sheet with folder URL": {
+            "main": [
+                [
+                    {
+                        "node": "Loop over rows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
